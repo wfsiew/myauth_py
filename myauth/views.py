@@ -51,7 +51,7 @@ def google_callback(req):
         'code': code,
         'client_id': '579168859503.apps.googleusercontent.com',
         'client_secret': 'G-WYqCt2UGYZRKq3V4o10wli',
-        'redirect_uri': 'http://localhost:8000/google/callback/',
+        'redirect_uri': constants.Google.url,
         'grant_type': 'authorization_code'
     }
     r = requests.post(url, data=k)
@@ -73,7 +73,7 @@ def facebook_callback(req):
         'code': code,
         'client_id': '239282433100666',
         'client_secret': 'dfee9766ec4e416c528b77f5b3040c48',
-        'redirect_uri': 'http://localhost:8000/facebook/callback/',
+        'redirect_uri': constants.Facebook.url,
         'grant_type': 'authorization_code'
     }
     r = requests.post(url, data=k)
@@ -99,7 +99,7 @@ def instagram_callback(req):
         'code': code,
         'client_id': '8b86537408774c258d468aa4c3db3207',
         'client_secret': '676392bc986740c1866b572a043d7a3c',
-        'redirect_uri': 'http://localhost:8000/instagram/callback/',
+        'redirect_uri': constants.Instagram.url,
         'grant_type': 'authorization_code'
     }
     r = requests.post(url, data=k)
@@ -113,7 +113,7 @@ def linkedin_callback(req):
         'code': code,
         'client_id': '756bpc1njs21xy',
         'client_secret': 'jNqljpC3PnLA7wCP',
-        'redirect_uri': 'http://localhost:8000/linkedin/callback/',
+        'redirect_uri': constants.Linkedin.url,
         'grant_type': 'authorization_code'
     }
     r = requests.post(url, data=k)
@@ -136,7 +136,7 @@ def live_callback(req):
         'code': code,
         'client_id': '49b7001a-8869-4057-9548-10784e7325f9',
         'client_secret': 'DVrjot8izkPnZmmigTaeKmW',
-        'redirect_uri': 'http://localhost:8000/live/callback/',
+        'redirect_uri': constants.Live.url,
         'grant_type': 'authorization_code'
     }
     r = requests.post(url, data=k)
