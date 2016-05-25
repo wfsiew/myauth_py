@@ -19,6 +19,8 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
+    url(r'^twitter/$', views.twitter_view, name='twitter_view'),
+    url(r'^twitter/callback/$', views.twitter_callback, name='twitter_callback'),
     url(r'^google/callback/$', views.google_callback, name='google_callback'), 
     url(r'^facebook/callback/$', views.facebook_callback, name='facebook_callback'),
     url(r'^instagram/callback/$', views.instagram_callback, name='instagram_callback'),

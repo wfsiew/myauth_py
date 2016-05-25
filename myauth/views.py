@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
-import requests, uuid, constants
+import requests, uuid, constants, urlparse
+import oauth2 as oauth
 
 def index(req):
     google = ('https://accounts.google.com/o/oauth2/auth'
@@ -43,6 +44,34 @@ def index(req):
     }
 
     return render(req, 'myauth/index.html', context=ctx)
+
+def twitter_view(req):
+    key = 'iJQGXxO7CsFBIElUhXappxPYv'
+    secret = 'JdsifIuJ47yUEzCitzpNjcVYO8n6ezS8BEh0456prCiIvZ0EJU'
+    consumer = oauth.Consumer(key=key, secret=secret)
+    client = oauth.Client(consumer)
+
+    url = 'https://api.twitter.com/oauth/request_token'
+    resp, content = client.request(url, "GET")
+    m = urlparse.parse_qs(content)
+    oauth_token = m['oauth_token'][0]
+    k = {
+        'oauth_token': oauth_token
+    }
+    r = requests.get('https://api.twitter.com/oauth/authenticate', params=k)
+    return HttpResponse(r.text)
+
+def twitter_callback(req):
+    oauth_token = req.GET.get('oauth_token')
+    oauth_verifier = req.GET.get('oauth_verifier')
+    key = 'iJQGXxO7CsFBIElUhXappxPYv'
+    secret = 'JdsifIuJ47yUEzCitzpNjcVYO8n6ezS8BEh0456prCiIvZ0EJU'
+    consumer = oauth.Consumer(key=key, secret=secret)
+    client = oauth.Client(consumer)
+
+    url = 'https://api.twitter.com/oauth/access_token'
+    resp, content = client.request(url, "GET")
+    return HttpResponse(content)
 
 def google_callback(req):
     code = req.GET.get('code')

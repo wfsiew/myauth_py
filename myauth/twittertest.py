@@ -2,8 +2,8 @@ import urllib
 from hashlib import sha1
 import hmac
 
-key = ' iJQGXxO7CsFBIElUhXappxPYv'
-secret = ' JdsifIuJ47yUEzCitzpNjcVYO8n6ezS8BEh0456prCiIvZ0EJU'
+key = 'iJQGXxO7CsFBIElUhXappxPYv'
+secret = 'JdsifIuJ47yUEzCitzpNjcVYO8n6ezS8BEh0456prCiIvZ0EJU'
 token_secret = ' gY1W2EZigjn9hucOCpanXG9jJqpOyfr3SACJjgGB9gVwK'
 
 k = urllib.quote('http://localhost:8000/main', safe='')
@@ -21,10 +21,10 @@ j = hashed.digest().encode("base64").rstrip('\n')
 print j
 
 import oauth2 as oauth
+import urlparse, requests
 
 # Create your consumer with the proper key/secret.
-consumer = oauth.Consumer(key="your-twitter-consumer-key", 
-    secret="your-twitter-consumer-secret")
+consumer = oauth.Consumer(key=key, secret=secret)
 
 # Request token URL for Twitter.
 request_token_url = "https://api.twitter.com/oauth/request_token"
@@ -36,3 +36,7 @@ client = oauth.Client(consumer)
 resp, content = client.request(request_token_url, "GET")
 print resp
 print content
+h = urlparse.parse_qs(content)
+oauth_token = h['oauth_token'][0]
+r = requests.get('https://api.twitter.com/oauth/authenticate', params={'oauth_token': oauth_token})
+print r.text
