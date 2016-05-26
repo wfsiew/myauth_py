@@ -56,22 +56,24 @@ def twitter_view(req):
     m = urlparse.parse_qs(content)
     oauth_token = m['oauth_token'][0]
     k = {
-        'oauth_token': oauth_token
+        'oauth_token': oauth_token,
+        'force_login': false
     }
     r = requests.get('https://api.twitter.com/oauth/authenticate', params=k)
     return HttpResponse(r.text)
 
 def twitter_callback(req):
+    # http://localhost:8000/twitter/callback/?oauth_token=b0yPPgAAAAAAvUxwAAABVOrNKrE&oauth_verifier=gKoSbsBb0KCaZGhw6xYiY4s1fkNYpKSz
     oauth_token = req.GET.get('oauth_token')
     oauth_verifier = req.GET.get('oauth_verifier')
     key = 'iJQGXxO7CsFBIElUhXappxPYv'
     secret = 'JdsifIuJ47yUEzCitzpNjcVYO8n6ezS8BEh0456prCiIvZ0EJU'
     consumer = oauth.Consumer(key=key, secret=secret)
-    client = oauth.Client(consumer)
+    token = oauth.Token(key=oauth_token, secret=oauth_verifier)
+    client = oauth.Client(consumer, token)
+    
 
-    url = 'https://api.twitter.com/oauth/access_token'
-    resp, content = client.request(url, "GET")
-    return HttpResponse(content)
+    return HttpResponse('content')
 
 def google_callback(req):
     code = req.GET.get('code')
@@ -85,7 +87,6 @@ def google_callback(req):
     }
     r = requests.post(url, data=k)
     d = r.json()
-    print d
     
     url = 'https://www.googleapis.com/oauth2/v1/userinfo'
     k = {
@@ -107,7 +108,6 @@ def facebook_callback(req):
     }
     r = requests.post(url, data=k)
     d = r.text
-    print d
 
     l = d.split('&')
     access_token = l[0].replace('access_token=', '')
@@ -147,7 +147,6 @@ def linkedin_callback(req):
     }
     r = requests.post(url, data=k)
     d = r.json()
-    print d
     
     url = 'https://api.linkedin.com/v1/people/~:(id,email-address,first-name,last-name,picture-url)'
     h = {
@@ -155,7 +154,6 @@ def linkedin_callback(req):
     }
     r = requests.get(url, headers=h)
     m = r.text
-    print m
     return HttpResponse(m, content_type='text/xml')
 
 def live_callback(req):
@@ -170,7 +168,6 @@ def live_callback(req):
     }
     r = requests.post(url, data=k)
     d = r.json()
-    print d
     
     url = 'https://apis.live.net/v5.0/me'
     k = {
